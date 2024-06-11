@@ -8,7 +8,7 @@
 
 
 
-
+#Description
 •	Developed an employee management dashboard with login, attendance marking, and leave submission.
 •	Created data visualizations to provide insights for the admin.
 •	Reduced leave approval processing time by 40% through efficient report monitoring.
