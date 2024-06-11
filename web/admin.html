@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management System</title>
+    
+    <script src="eel.js"></script>
+</head>
+
+<body>
+
+    <div id="login-form" style="display: block;">
+        <form onsubmit="return false">
+            <section class="contact_section layout_padding">
+                <div class="container">
+                    <div class="heading_container heading_center">
+                        <h2>
+
+                        </h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 col-lg-6 mx-auto">
+                            <div class="form_container">
+                                <form action="">
+                                    
+
+                                    <br>
+                                    <label for="status">do you want to check leave application? </label>
+                                    <select id="status">
+                                        <option value="yes">yes</option>
+                                        <option value="no">no</option>
+                                    </select>
+
+                                    <button onclick="processForm5()">Submit</button>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div id="result_admin"></div>
+        </form>
+    </div>
+
+
+
+
+
+
+
+
+    
+</body>
+<script>
+    function processForm5() {
+       
+      
+        const status = document.getElementById("status").value;
+
+
+        if (status == "yes") {
+            eel.check_leave()(function (response) {
+                document.getElementById("result_admin").innerText = response;
+                loadAttendancePage();
+            })
+        }
+        
+
+
+
+    }
+    function loadAttendancePage() {
+        // Fetch the contents of report_generation.html using AJAX
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'approve.html', true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Replace the content of the "attendance-content" div with the contents of report_generation.html
+                document.getElementById("attendance-content").innerHTML = xhr.responseText;
+                document.getElementById("attendance-content").style.display = "block"; // Display the content
+            }
+        };
+        xhr.send();
+    }
+
+
+</script>
+
+</html>

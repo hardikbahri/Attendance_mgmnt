@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management System</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <script src="eel.js"></script>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <link rel="icon" href="images/fevicon.png" type="image/gif" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>Hostit</title>
+
+
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+
+    <!-- fonts style -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- font awesome style -->
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="css/responsive.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="login-form" style="display: block;">
+        <form onsubmit="return false">
+            <section class="contact_section layout_padding">
+                <div class="container">
+                    <div class="heading_container heading_center">
+                        <h2>
+                            Login
+                        </h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 col-lg-6 mx-auto">
+                            <div class="form_container">
+                                <form action="">
+                                    <label for="choice">Choose action: </label>
+                                    <select id="choice">
+                                        <option value="login">Login</option>
+                                        <option value="register">Register</option>
+                                    </select>
+                                    <br>
+                                    
+                                    <label for="username">Username: </label>
+                                    <input type="text" placeholder="Username" id="username">
+                                    <br>
+                                    <label for="password">Password: </label>
+                                    <input type="password" placeholder="Password" id="password">
+                                    <br>
+                                    <button onclick="processForm()">Submit</button>
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+    </div>
+    <!-- end contact section -->
+
+
+
+
+
+    
+    <div id="attendance-content" style="display: none;">
+        hi
+
+
+
+    </div>
+    <div id="result"></div>
+
+    <!-- content after login -->
+
+
+
+
+</body>
+
+
+<script>
+    
+    function processForm() {
+
+        const choice = document.getElementById("choice").value;
+        const username = document.getElementById("username").value;
+        
+        const password = document.getElementById("password").value;
+        console.log(username);
+
+        if (choice == 'login'&& username!='admin') {
+
+            eel.login(username, password)(function (response) {
+                document.getElementById("result").innerText = response;
+                if (response == "login successful") {
+                    loadAttendancePage("attendance.html",username); // Call the function to load the attendance page
+                }
+            });
+        } 
+
+        if (choice == 'login'&& username=='admin') {
+
+            eel.login(username, password)(function (response) {
+                document.getElementById("result").innerText = response;
+                if (response == "login successful") {
+                    loadAttendancePage("admin.html",username); // Call the function to load the attendance page
+                }
+            });
+        }
+        
+
+        else if (choice == 'register') {
+            eel.register_user(username, password)(function (response) {
+                document.getElementById("result").innerText = response;
+            });
+        }
+    }
+
+    function processForm5() {
+       
+      
+        const status = document.getElementById("status").value;
+
+
+        if (status == "yes") {
+            eel.check_leave()(function (response) {
+                document.getElementById("result_admin").innerText = response;
+                loadAttendancePage("approve.html");
+            })
+        }
+        
+
+
+
+    }
+    function processForm6() {
+       
+      
+        const option = document.getElementById("option").value;
+        const months = document.getElementById("months").value;
+        const usernamex = document.getElementById("usernamex").value;
+        const rep=document.getElementById("rep").value;
+        if(rep=="yes"){
+            eel.report_generation_se(usernamex, option, months)
+            }
+        
+        
+
+
+
+    }
+    function process_approval() {
+        
+        const leave = document.getElementById("leave").value;
+        if(leave=="yes"){
+        eel.approve_leave(leave)(function (response) {
+            document.getElementById("result").innerText = response;
+        });
+    }
+        
+        
+
+
+    }
+    
+
+    function loadAttendancePage(page,username) {
+        // Fetch the contents of attendance.html using AJAX
+        document.getElementById("login-form").style.display = "none";
+        const xhr = new XMLHttpRequest();
+        if (page == "attendance.html") {
+            xhr.open('GET', 'attendance.html', true);
+           
+        }
+        if (page == "approve.html") {
+            xhr.open('GET', 'approve.html', true);
+           
+        }
+        if (page == "admin.html") {
+            xhr.open('GET', 'admin.html', true);
+           
+        }
+        if (page == "report_generation.html") {
+            xhr.open('GET', 'report_generation.html', true);
+        }
+        if (page == "leave.html") {
+            xhr.open('GET', 'leave.html', true);
+        }
+
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Replace the content of the "attendance-content" div with the contents of attendance.html
+                document.getElementById("attendance-content").innerHTML = xhr.responseText;
+                document.getElementById("attendance-content").style.display = "block"; // Display the content
+                
+
+            }
+        };
+        xhr.send();
+    }
+    function process() {
+        const attendance = document.getElementById("attendance").value;
+        const username=document.getElementById("username").value;
+        const report = document.getElementById("report").value;
+
+        if (attendance === "Present" || attendance === "Absent") {
+            eel.attendance_registration(attendance, username)(function (response) {
+                document.getElementById("result").innerText = response;
+            });
+        }
+
+        if (report === "yes") {
+            loadAttendancePage('report_generation.html');
+        }
+        processForm3()
+    }
+    function processForm3() {
+        const username=document.getElementById("username").value;
+        const option = document.getElementById("option").value;
+        const months = document.getElementById("months").value;
+        
+        const leave = document.getElementById("leave").value;
+        eel.report_generation_se(username, option, months)
+        if (leave == "yes") {
+            loadAttendancePage('leave.html')
+        }
+
+
+    }
+    function processForm4() {
+        const username=document.getElementById("username").value;
+        const option = document.getElementById("option").value;
+        const days = document.getElementById("days").value;
+        
+        const status = document.getElementById("status").value;
+
+
+        if (option == "yes") {
+            eel.request_leave(username, days)(function (response) {
+                document.getElementById("result").innerText = response;
+            })
+        }
+        if (status == "yes") {
+            eel.check_leave_status(username)(function (response) {
+                document.getElementById("result").innerText = response;
+            })
+
+        }
+
+
+
+    }
+
+
+</script>
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management System</title>
+  
+    <script src="eel.js"></script>
+</head>
+
+<body>
+    <div id="login-form" style="display: block;">
+        <form onsubmit="return false">
+            <section class="contact_section layout_padding">
+                <div class="container">
+                    <div class="heading_container heading_center">
+                        <h2>
+                            
+                        </h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 col-lg-6 mx-auto">
+                            <div class="form_container">
+                                <form action="">
+                                    <label for="option">Choose action: </label>
+                                    <select id="option">
+                                        <option value="monthly">monthly</option>
+                                        <option value="all-time">all-time</option>
+                                    </select>
+                                    <br>
+
+                                    <label for="username">Username: </label>
+                                    <input type="text" placeholder="Username" id="usernamex">
+                                    <br>
+                                    <label for="months">enter the month in numbers </label>
+                                    <input type="text" id="months">
+
+                                    <br>
+                                    <label for="leave">Would you like to see reports </label>
+                                    <select id="rep">
+                                        <option value="yes">yes</option>
+                                        <option value="no">no</option>
+                                    </select>
+                                    
+
+                                    <button onclick="processForm6()">Submit</button>
+                                    <label for="leave">Would you like to request approve leave? </label>
+                                    <select id="leave">
+                                        <option value="yes">yes</option>
+                                        <option value="no">no</option>
+                                    </select>
+                                    <button onclick="process_approval()">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+    </div>
+
+
+
+   
+</body>
+<script>
+    function processForm6() {
+        const option = document.getElementById("option").value;
+        const months = document.getElementById("months").value;
+        const usernamex = document.getElementById("usernamex").value;
+        const rep=document.getElementById("rep").value;
+        if(rep=="yes"){
+        eel.report_generation_se(usernamex, option, months)
+        }
+        
+
+
+    }
+    function process_approval() {
+        
+        const leave = document.getElementById("leave").value;
+        if(leave=="yes"){
+        eel.approve_leave(leave)(function (response) {
+            document.getElementById("result").innerText = response;
+        });
+    }
+        
+        
+
+
+    }
+    function loadAttendancePage() {
+        // Fetch the contents of report_generation.html using AJAX
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'leave.html', true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Replace the content of the "attendance-content" div with the contents of report_generation.html
+                document.getElementById("attendance-content").innerHTML = xhr.responseText;
+                document.getElementById("attendance-content").style.display = "block"; // Display the content
+            }
+        };
+        xhr.send();
+    }
+
+</script>
+
+</html>
